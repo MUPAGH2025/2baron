@@ -48,7 +48,8 @@ jobs:
           jupyter nbconvert \
             --to pdf \
             --execute Proj1-MUP-DBaron.ipynb \
-            --output Proj1-MUP-DBaron
+            --output Proj1-MUP-DBaron \
+            --no-input
 
       - name: Collect report artifacts (GIF + PDF)
         run: |
