@@ -1,58 +1,14 @@
-# name: Projekt
-# on: push
-# jobs:
-#   pdf:
-#     runs-on: ubuntu-22.04
-#     steps:
-#       - run: pip install ipykernel scipy pint open_atmos_jupyter_utils 
-#       - uses: actions/checkout@v4
-#       - run: sudo apt-get install texlive-xetex inkscape pandoc
-#       - run: pip install nbconvert
-#       - run: python -m nbconvert --to pdf --execute Lab2.ipynb
-#       - uses: actions/upload-artifact@v4
-#         with:
-#           path: anim.gif
-
 name: Projekt
-on:
-  push:
-    paths:
-      - Proj1-MUP-DBaron.ipynb
-      - .github/workflows/**
-
+on: push
 jobs:
   pdf:
     runs-on: ubuntu-22.04
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - run: pip install ipykernel scipy pint open_atmos_jupyter_utils 
+      - uses: actions/checkout@v4
+      - run: sudo apt-get install texlive-xetex inkscape pandoc
+      - run: pip install nbconvert
+      - run: python -m nbconvert --to pdf --execute Lab2.ipynb
+      - uses: actions/upload-artifact@v4
         with:
-          python-version: '3.11'
-
-      - name: Install system deps for PDF
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-xetex texlive-fonts-recommended texlive-plain-generic inkscape pandoc
-
-      - name: Install Python dependencies
-        run: |
-          pip install ipykernel scipy pint open_atmos_jupyter_utils PyMPDATA nbconvert
-
-      - name: Execute notebook and export to PDF
-        run: |
-          jupyter nbconvert \
-            --to pdf \
-            --execute Proj1-MUP-DBaron.ipynb \
-            --output Psroj1-MUP-DBaron
-
-      - name: Upload PDF and GIFs as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: wyniki-projektu
-          path: |
-            Proj1-MUP-DBaron.pdf
-            *.gif
+          path: anim.gif

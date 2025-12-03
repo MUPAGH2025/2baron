@@ -1,0 +1,44 @@
+
+name: Projekt
+on:
+  push:
+    paths:
+      - Proj1-MUP-DBaron.ipynb
+      - .github/workflows/**
+
+jobs:
+  pdf:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install system deps for PDF
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-xetex texlive-fonts-recommended texlive-plain-generic inkscape pandoc
+
+      - name: Install Python dependencies
+        run: |
+          pip install ipykernel scipy pint open_atmos_jupyter_utils PyMPDATA nbconvert
+
+      - name: Execute notebook and export to PDF
+        run: |
+          jupyter nbconvert \
+            --to pdf \
+            --execute Proj1-MUP-DBaron.ipynb \
+            --output Psroj1-MUP-DBaron.pdf
+
+      - name: Upload PDF and GIFs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wyniki-projektu
+          path: |
+            Proj1-MUP-DBaron.pdf
+            *.gif
