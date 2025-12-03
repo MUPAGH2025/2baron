@@ -1,17 +1,17 @@
-
 name: Projekt
+
 on:
   push:
-    paths:
-      - Proj1-MUP-DBaron.ipynb
-      - .github/workflows/**
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  pdf:
+  build:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -19,26 +19,34 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install system deps for PDF
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-xetex texlive-fonts-recommended texlive-plain-generic inkscape pandoc
-
       - name: Install Python dependencies
         run: |
-          pip install ipykernel scipy pint open_atmos_jupyter_utils PyMPDATA nbconvert
+          python -m pip install --upgrade pip
+          pip install scipy pint matplotlib open_atmos_jupyter_utils ipykernel numpy nbconvert PyMPDATA
+
+      - name: Install system packages (LaTeX, Inkscape, Pandoc)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-xetex inkscape pandoc
 
       - name: Execute notebook and export to PDF
         run: |
           jupyter nbconvert \
             --to pdf \
             --execute Proj1-MUP-DBaron.ipynb \
-            --output Psroj1-MUP-DBaron.pdf
+            --output Proj1-MUP-DBaron
 
-      - name: Upload PDF and GIFs as artifact
+      - name: Collect report artifacts (GIF + PDF)
+        run: |
+          mkdir -p artifacts
+          cp ./*.gif artifacts/ 2>/dev/null || true
+          cp ./*.pdf artifacts/ 2>/dev/null || true
+          echo "Zebrane pliki w artifacts/:"
+          ls -la artifacts
+
+      - name: Upload report artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: wyniki-projektu
-          path: |
-            Proj1-MUP-DBaron.pdf
-            *.gif
+          name: projekt-raport
+          path: artifacts
+          if-no-files-found: error
