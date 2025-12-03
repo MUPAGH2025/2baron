@@ -48,7 +48,7 @@ jobs:
           jupyter nbconvert \
             --to pdf \
             --execute Proj1-MUP-DBaron.ipynb \
-            --output Proj1-MUP-DBaron \
+            --output "Jak_bezpiecznie_plywac_kajakiem_po_jeziorze_polodowcowym_Dawid_Baron" \
             --no-input
 
       - name: Collect report artifacts (GIF + PDF)
