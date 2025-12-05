@@ -1,17 +1,3 @@
-# name: Projekt
-# on: push
-# jobs:
-#   pdf:
-#     runs-on: ubuntu-22.04
-#     steps:
-#       - run: pip install ipykernel scipy pint open_atmos_jupyter_utils 
-#       - uses: actions/checkout@v4
-#       - run: sudo apt-get install texlive-xetex inkscape pandoc
-#       - run: pip install nbconvert
-#       - run: python -m nbconvert --to pdf --execute Lab2.ipynb
-#       - uses: actions/upload-artifact@v4
-#         with:
-#           path: anim.gif
 name: Projekt
 
 on:
@@ -49,7 +35,11 @@ jobs:
             --to pdf \
             --execute Kajak_na_lodowcu-Dawid_Baron.ipynb \
             --output "Sprawozdanie_Dawid_Baron" \
-            --no-input
+            --no-input \
+            --no-prompt \
+            --TagRemovePreprocessor.enabled=True \
+            --TagRemovePreprocessor.remove_cell_tags="{'hide-cell'}" \
+            --TagRemovePreprocessor.remove_all_outputs_tags="{'hide-output'}" \
 
       - name: Collect report artifacts (GIF + PDF)
         run: |
